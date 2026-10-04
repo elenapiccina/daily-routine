@@ -58,7 +58,7 @@
             overflow: hidden;
         }
 
-        /* Header Banner matching screenshot */
+        /* Header Banner */
         .header-banner {
             background: linear-gradient(135deg, var(--header-pink-start), var(--header-pink-end));
             padding: 10px 16px;
@@ -253,6 +253,16 @@
             overflow: hidden;
             text-overflow: ellipsis;
             flex-grow: 1;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: background 0.15s ease;
+            user-select: none;
+        }
+
+        .habit-label:hover {
+            background-color: rgba(226, 90, 145, 0.08);
+            color: var(--accent-pink);
         }
 
         .habit-reorder, .habit-actions {
@@ -267,7 +277,7 @@
             color: var(--text-muted);
             cursor: pointer;
             font-size: 0.7rem;
-            padding: 2px;
+            padding: 2px 4px;
             opacity: 0.35;
             transition: all 0.15s ease;
             line-height: 1;
@@ -477,7 +487,6 @@
             const storedChecks = localStorage.getItem('routine_checks_31');
             let loadedHabits = storedHabits ? JSON.parse(storedHabits) : defaultHabits;
             
-            // Auto-migrate "hair ritual" to "hair routine" with 🧼 if present
             loadedHabits = loadedHabits.map(h => {
                 if (h.name === "hair ritual" || (h.id === 2 && h.name.includes("hair"))) {
                     return { ...h, icon: "🧼", name: "hair routine" };
@@ -506,9 +515,9 @@
 
     const loadedData = safeLoadData();
     let habits = loadedData.habits;
-    let checks = loadedData.checks; // Format: { "habitId_day": true }
+    let checks = loadedData.checks;
 
-    const todayDate = new Date().getDate(); // Current Day 1-31
+    const todayDate = new Date().getDate();
     let activeDay = todayDate;
     let hidePast = false;
 
@@ -529,14 +538,12 @@
         const bodyTbody = document.getElementById('tableBody');
         const table = document.getElementById('trackerTable');
 
-        // Toggle Hide Past Class
         if (hidePast) {
             table.classList.add('hide-past');
         } else {
             table.classList.remove('hide-past');
         }
 
-        // Render Headers (Days 1 to 31)
         headerTr.innerHTML = '<th class="sticky-col">Aa Name</th>';
         for (let day = 1; day <= 31; day++) {
             const th = document.createElement('th');
@@ -550,18 +557,15 @@
             headerTr.appendChild(th);
         }
 
-        // Render Percentage Column Header
         const thPct = document.createElement('th');
         thPct.className = 'progress-header';
         thPct.innerText = '%';
         headerTr.appendChild(thPct);
 
-        // Render Habit Rows
         bodyTbody.innerHTML = '';
         habits.forEach((habit, index) => {
             const tr = document.createElement('tr');
 
-            // Sticky Left Habit Column with Move, Edit, and Delete controls
             const tdSticky = document.createElement('td');
             tdSticky.className = 'sticky-col';
             tdSticky.innerHTML = `
@@ -570,11 +574,10 @@
                         <button class="btn-icon-action" onclick="moveHabitUp(${index})" title="Move Up">▲</button>
                         <button class="btn-icon-action" onclick="moveHabitDown(${index})" title="Move Down">▼</button>
                     </div>
-                    <span class="habit-label" title="${habit.icon ? habit.icon + ' ' : ''}${habit.name}">
+                    <span class="habit-label" ondblclick="editHabit(${habit.id})" title="Double-click to edit name">
                         ${habit.icon ? habit.icon + ' ' : ''}${habit.name}
                     </span>
                     <div class="habit-actions">
-                        <button class="btn-icon-action" onclick="editHabit(${habit.id})" title="Edit Habit">✏️</button>
                         <button class="btn-icon-action btn-delete-row" onclick="deleteHabit(${habit.id})" title="Delete Habit">✕</button>
                     </div>
                 </div>
@@ -583,7 +586,6 @@
 
             let checkedCount = 0;
 
-            // Checkboxes 1 to 31
             for (let day = 1; day <= 31; day++) {
                 const td = document.createElement('td');
                 let classes = '';
@@ -605,7 +607,6 @@
                 tr.appendChild(td);
             }
 
-            // Compact Percentage Cell at End of Task Row
             const pct = Math.round((checkedCount / 31) * 100);
             const tdPct = document.createElement('td');
             tdPct.className = 'progress-cell';
@@ -657,7 +658,7 @@
         const targetCol = document.getElementById(`col_header_${activeDay}`);
         const wrapper = document.getElementById('scrollWrapper');
         if (targetCol && wrapper) {
-            const offsetLeft = targetCol.offsetLeft - 180; // offset for sticky column
+            const offsetLeft = targetCol.offsetLeft - 180;
             wrapper.scrollTo({ left: Math.max(0, offsetLeft), behavior: 'smooth' });
         }
     }
@@ -667,7 +668,6 @@
         const text = input.value.trim();
         if (!text) return;
 
-        // Auto detect emoji prefix if present
         const emojiMatch = text.match(/^(\p{Extended_Pictographic}|\p{Emoji_Presentation})\s*(.*)$/u);
         let icon = "✨";
         let name = text;
@@ -787,7 +787,7 @@
     function initWidget() {
         initDaySelector();
         renderTracker();
-        setTimeout(scrollToToday, 200); // Smooth scroll to today on load
+        setTimeout(scrollToToday, 200);
     }
 
     if (document.readyState === 'loading') {
