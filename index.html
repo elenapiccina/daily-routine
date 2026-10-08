@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-card: rgba(255, 255, 255, 0.96);
@@ -35,7 +36,7 @@
         body {
             font-family: 'Alice', Georgia, serif;
             background-color: transparent;
-            padding: 8px;
+            padding: 12px 8px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -46,13 +47,13 @@
 
         .widget-container {
             width: 100%;
-            max-width: 950px;
+            max-width: 980px;
             background: var(--bg-card);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-soft);
             border-radius: 16px;
-            padding: 12px 14px;
+            padding: 14px 16px;
             box-shadow: var(--shadow-subtle);
             position: relative;
             overflow: hidden;
@@ -64,7 +65,7 @@
             padding: 10px 16px;
             border-radius: 12px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             box-shadow: 0 2px 10px rgba(226, 90, 145, 0.12);
         }
 
@@ -84,7 +85,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             gap: 8px;
             flex-wrap: wrap;
         }
@@ -99,9 +100,9 @@
             background: #ffffff;
             border: 1px solid var(--border-soft);
             border-radius: 8px;
-            padding: 4px 10px;
+            padding: 5px 12px;
             font-family: 'Alice', serif;
-            font-size: 0.74rem;
+            font-size: 0.76rem;
             color: var(--text-dark);
             cursor: pointer;
             transition: all 0.15s ease;
@@ -153,8 +154,8 @@
             background: #ffffff;
             z-index: 10;
             text-align: left !important;
-            min-width: 180px;
-            max-width: 220px;
+            min-width: 190px;
+            max-width: 230px;
             box-shadow: 2px 0 6px rgba(0,0,0,0.03);
         }
 
@@ -162,6 +163,45 @@
             background: #FAF8F9;
             color: var(--text-muted);
             font-weight: normal;
+        }
+
+        /* Drag and Drop Visual Indicators */
+        tr.draggable-row {
+            cursor: grab;
+            transition: background-color 0.15s ease;
+        }
+
+        tr.draggable-row:active {
+            cursor: grabbing;
+        }
+
+        tr.dragging {
+            opacity: 0.4;
+            background-color: #FAF2F5 !important;
+        }
+
+        tr.drag-over {
+            border-top: 2px solid var(--accent-pink) !important;
+            background-color: rgba(226, 90, 145, 0.05);
+        }
+
+        .drag-handle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding: 2px 4px;
+            margin-right: 4px;
+            cursor: grab;
+            user-select: none;
+            opacity: 0.4;
+            transition: opacity 0.15s ease, color 0.15s ease;
+        }
+
+        tr:hover .drag-handle {
+            opacity: 0.85;
+            color: var(--accent-pink);
         }
 
         /* Header Days */
@@ -174,7 +214,7 @@
 
         /* Compact Percentage Column */
         .progress-header {
-            min-width: 45px;
+            min-width: 48px;
             color: var(--accent-pink);
             font-weight: bold;
             background: #FAF8F9;
@@ -209,17 +249,18 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            padding: 2px;
         }
 
         .custom-checkbox {
-            width: 16px;
-            height: 16px;
+            width: 17px;
+            height: 17px;
             border: 1.5px solid #D1C7CC;
-            border-radius: 4px;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.15s ease;
+            transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: #ffffff;
         }
 
@@ -230,6 +271,7 @@
         .checkbox-container input:checked + .custom-checkbox {
             background-color: var(--notion-blue);
             border-color: var(--notion-blue);
+            transform: scale(1.1);
         }
 
         .checkbox-container input:checked + .custom-checkbox::after {
@@ -244,6 +286,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 4px;
+            width: 100%;
         }
 
         .habit-label {
@@ -265,10 +308,9 @@
             color: var(--accent-pink);
         }
 
-        .habit-reorder, .habit-actions {
+        .habit-actions {
             display: flex;
             align-items: center;
-            gap: 2px;
         }
 
         .btn-icon-action {
@@ -276,9 +318,9 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             padding: 2px 4px;
-            opacity: 0.35;
+            opacity: 0.3;
             transition: all 0.15s ease;
             line-height: 1;
         }
@@ -288,12 +330,8 @@
         }
 
         .btn-icon-action:hover {
-            color: var(--accent-pink);
-            transform: scale(1.15);
-        }
-
-        .btn-delete-row:hover {
             color: #C62828 !important;
+            transform: scale(1.15);
         }
 
         /* Footer Controls */
@@ -329,11 +367,11 @@
         .input-habit {
             border: 1px solid var(--border-soft);
             border-radius: 6px;
-            padding: 4px 8px;
+            padding: 5px 8px;
             font-family: 'Alice', serif;
             font-size: 0.75rem;
             outline: none;
-            width: 140px;
+            width: 150px;
         }
 
         .input-habit:focus {
@@ -411,14 +449,28 @@
             background: #E8CCD5;
             border-radius: 4px;
         }
+
+        /* Canvas Overlay for Confetti */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
 
+<!-- Fullscreen Canvas for Particle Confetti Animation -->
+<canvas id="confettiCanvas"></canvas>
+
 <div class="widget-container">
     <!-- Header Banner -->
     <div class="header-banner">
-        <span class="header-title">🔆 DAILY ROUTINE</span>
+        <span class="header-title">份 DAILY ROUTINE</span>
     </div>
 
     <!-- Toolbar Controls -->
@@ -520,6 +572,90 @@
     const todayDate = new Date().getDate();
     let activeDay = todayDate;
     let hidePast = false;
+    let draggedIndex = null;
+
+    // Self-contained pastel particle confetti animation
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const ctx = confettiCanvas.getContext('2d');
+    let particles = [];
+    let animationFrameId = null;
+
+    function resizeCanvas() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function triggerConfetti(originX, originY) {
+        const colors = ['#E25A91', '#2383E2', '#FEE1E7', '#FFB7C5', '#A8DADC', '#E0A96D', '#B388FF'];
+        const numParticles = 45;
+
+        for (let i = 0; i < numParticles; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 8 + 3;
+            particles.push({
+                x: originX,
+                y: originY,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 2, // Slight upward boost
+                size: Math.random() * 7 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                rotation: Math.random() * Math.PI * 2,
+                vRot: (Math.random() - 0.5) * 0.2,
+                opacity: 1,
+                life: 1,
+                decay: Math.random() * 0.02 + 0.015,
+                shape: Math.random() > 0.4 ? 'rect' : 'circle'
+            });
+        }
+
+        if (!animationFrameId) {
+            animateConfetti();
+        }
+    }
+
+    function animateConfetti() {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.2; // Gravity
+            p.vx *= 0.98; // Air resistance
+            p.rotation += p.vRot;
+            p.life -= p.decay;
+
+            if (p.life <= 0) {
+                particles.splice(i, 1);
+                continue;
+            }
+
+            ctx.save();
+            ctx.globalAlpha = p.life;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation);
+            ctx.fillStyle = p.color;
+
+            if (p.shape === 'rect') {
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        if (particles.length > 0) {
+            animationFrameId = requestAnimationFrame(animateConfetti);
+        } else {
+            animationFrameId = null;
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        }
+    }
 
     function initDaySelector() {
         const select = document.getElementById('daySelect');
@@ -563,22 +699,64 @@
         headerTr.appendChild(thPct);
 
         bodyTbody.innerHTML = '';
+        
         habits.forEach((habit, index) => {
             const tr = document.createElement('tr');
+            tr.className = 'draggable-row';
+            tr.setAttribute('draggable', 'true');
+            tr.setAttribute('data-index', index);
 
+            // Drag and Drop Event Listeners
+            tr.addEventListener('dragstart', (e) => {
+                draggedIndex = index;
+                tr.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', index);
+            });
+
+            tr.addEventListener('dragend', () => {
+                tr.classList.remove('dragging');
+                document.querySelectorAll('.draggable-row').forEach(row => row.classList.remove('drag-over'));
+            });
+
+            tr.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                const row = e.currentTarget;
+                if (draggedIndex !== null && draggedIndex !== index) {
+                    row.classList.add('drag-over');
+                }
+            });
+
+            tr.addEventListener('dragleave', (e) => {
+                e.currentTarget.classList.remove('drag-over');
+            });
+
+            tr.addEventListener('drop', (e) => {
+                e.preventDefault();
+                tr.classList.remove('drag-over');
+                if (draggedIndex === null || draggedIndex === index) return;
+
+                // Move item in array
+                const movedHabit = habits.splice(draggedIndex, 1)[0];
+                habits.splice(index, 0, movedHabit);
+
+                draggedIndex = null;
+                safeSaveData();
+                renderTracker();
+            });
+
+            // Sticky Habit Column Content
             const tdSticky = document.createElement('td');
             tdSticky.className = 'sticky-col';
             tdSticky.innerHTML = `
                 <div class="habit-name">
-                    <div class="habit-reorder">
-                        <button class="btn-icon-action" onclick="moveHabitUp(${index})" title="Move Up">▲</button>
-                        <button class="btn-icon-action" onclick="moveHabitDown(${index})" title="Move Down">▼</button>
-                    </div>
+                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
                     <span class="habit-label" ondblclick="editHabit(${habit.id})" title="Double-click to edit name">
                         ${habit.icon ? habit.icon + ' ' : ''}${habit.name}
                     </span>
                     <div class="habit-actions">
-                        <button class="btn-icon-action btn-delete-row" onclick="deleteHabit(${habit.id})" title="Delete Habit">✕</button>
+                        <button class="btn-icon-action" onclick="deleteHabit(${habit.id})" title="Delete Habit">✕</button>
                     </div>
                 </div>
             `;
@@ -600,7 +778,7 @@
 
                 td.innerHTML = `
                     <label class="checkbox-container">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck(${habit.id}, ${day}, this.checked)">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="handleCheckChange(event, ${habit.id}, ${day})">
                         <span class="custom-checkbox"></span>
                     </label>
                 `;
@@ -618,11 +796,20 @@
         });
     }
 
-    function toggleCheck(habitId, day, isChecked) {
+    function handleCheckChange(e, habitId, day) {
+        const isChecked = e.target.checked;
         const key = `${habitId}_${day}`;
         checks[key] = isChecked;
         safeSaveData();
         updateHabitPct(habitId);
+
+        if (isChecked) {
+            // Get screen coordinates of the clicked checkbox for precise confetti explosion
+            const rect = e.target.parentElement.getBoundingClientRect();
+            const originX = rect.left + rect.width / 2;
+            const originY = rect.top + rect.height / 2;
+            triggerConfetti(originX, originY);
+        }
     }
 
     function updateHabitPct(habitId) {
@@ -658,7 +845,7 @@
         const targetCol = document.getElementById(`col_header_${activeDay}`);
         const wrapper = document.getElementById('scrollWrapper');
         if (targetCol && wrapper) {
-            const offsetLeft = targetCol.offsetLeft - 180;
+            const offsetLeft = targetCol.offsetLeft - 190;
             wrapper.scrollTo({ left: Math.max(0, offsetLeft), behavior: 'smooth' });
         }
     }
@@ -695,26 +882,6 @@
         habits = habits.filter(h => h.id !== id);
         safeSaveData();
         renderTracker();
-    }
-
-    function moveHabitUp(index) {
-        if (index > 0) {
-            const temp = habits[index];
-            habits[index] = habits[index - 1];
-            habits[index - 1] = temp;
-            safeSaveData();
-            renderTracker();
-        }
-    }
-
-    function moveHabitDown(index) {
-        if (index < habits.length - 1) {
-            const temp = habits[index];
-            habits[index] = habits[index + 1];
-            habits[index + 1] = temp;
-            safeSaveData();
-            renderTracker();
-        }
     }
 
     function editHabit(id) {
